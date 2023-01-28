@@ -1,6 +1,30 @@
 # blockchain-genetics
 Genetics system with inheritence pattern based on dominant/recessive genes
 
+Ideas
+[] Merkle Tree for NFT to store family tree?
+
+## Gene Types
+
+### Characteristics (cGene)
+
+cGene's use an `Enum` to define a phenotype. Different phenotypes are distinct.
+The child genotype and its component alleles being dominant or recessive influences what phenotype is displayed.
+
+Example: Eye Colour, Blood
+
+`alleleRanking`: Ranking of each allele from most recessive to most dominant.
+
+### Attributes (aGene)
+
+aGene's use an `Uint` to define a phenotype. Different phenotypes have no absolute definition.
+The child genotype and its component alleles values are used together to influence what the value of the phenotype is.
+
+Example: Height, Hair Growth Rate
+
+`inheritenceValueType`: Average (Child value is (Parent A + Parent B) / 2)), Variable (Child value is >= ParentLowerValue & <= ParentHighValue)
+`inheritenceValueFuzz`: Applies a 'fuzz' to the uint, allowing for value to have a chance to change up to +- the defined %. 
+
 ## Info
 
 Parents pass on traits or characteristics, such as eye colour and blood type, to their children through their genes. Some health conditions and diseases can be passed on genetically too.
