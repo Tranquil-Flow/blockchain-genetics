@@ -7,8 +7,8 @@ error NoReproductionRequestToCancel();
 error ReproductionNotRequested();
 
 contract GeneticNFT is ERC721 {
-    enum EyeColor { BLUE, GREEN, BROWN }
-    enum BloodType { A, B, AB, O }
+    enum EyeColor { BLUE, GREEN, BROWN } // BLUE is most recessive, BROWN is most dominant
+    enum BloodType { O, A, B, AB } // O is most recessive, AB is most dominant
 
     struct Traits {
         EyeColor eyeColor;
@@ -64,8 +64,8 @@ contract GeneticNFT is ERC721 {
         uint randomResult = uint(randomHash);
 
         // Enum Traits
-        EyeColor childEyeColor = (randomResult % 2 == 0) ? organism1.traits.eyeColor : organism2.traits.eyeColor;
-        BloodType childBloodType = (randomResult % 3 == 0) ? organism1.traits.bloodType : organism2.traits.bloodType;
+        EyeColor childEyeColor = EyeColor(getDominantTrait(uint(organism1.traits.eyeColor), uint(organism2.traits.eyeColor)));
+        BloodType childBloodType = BloodType(getDominantTrait(uint(organism1.traits.bloodType), uint(organism2.traits.bloodType)));
 
         // Uint Traits
         uint childHeight = mutateValue((randomResult % 2 == 0) ? organism1.traits.height : organism2.traits.height);
@@ -78,6 +78,10 @@ contract GeneticNFT is ERC721 {
         uint newOrganismId = organisms.length - 1;
 
         _mint(msg.sender, newOrganismId);
+    }
+
+    function getDominantTrait(uint _trait1, uint _trait2) private pure returns (uint) {
+        return (_trait1 > _trait2) ? _trait1 : _trait2;
     }
 
     function mutateValue(uint _value) private view returns (uint) {

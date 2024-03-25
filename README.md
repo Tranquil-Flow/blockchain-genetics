@@ -5,6 +5,7 @@ Genetics system with inheritence pattern based on dominant/recessive genes
 [ ] Merkle Tree for NFT to store family tree? Would also allow extraction of all ancestors DNA.
 [ ] Consider more secure randomness with Chainlink VRF or Unifaction VOR
 [ ] Capped vs uncapped traits
+[ ] Mutation rate when reproducing
 
 ### Problems
 [ ] How do unique new traits arise?
@@ -12,18 +13,20 @@ Genetics system with inheritence pattern based on dominant/recessive genes
 
 ### To-Do
 [ ] v2
-
+[ ] Genesis NFT's for initial genetics
+ 
 ## Genetic NFTs
 Genetic NFT's can breed with one another to produce children, which take their genetics from a randomised combination of their parents DNA similar to biological life.
 
 ### v1
 - Trait system with pre-defined traits that are represented by a single traits
 - Basic reproduction system with fuzzing of adult DNA values to determine child DNA values.
-- `enum` traits have 50/50 chance of inheriting from parent A or B
-- GenotypicTraits (`uint`) is the average of a fuzzed value from parent A and B
+- `enum` traits are ranked from recessive to dominant, child inheriting the most dominant
+- `uint` traits are average of a fuzzed value (`geneticVariation`) from parent A and B
 
 ### v2
 - More refined system of trait expression to match real life's complexities. Have traits arise from multiple genes/alleles.
+- Dominant/Recessive mapping instead of simplistic ranking
 - Differentiate traits between GenotypicTraits and PhenotypicTraits, with the latter being observable traits that are imapcted by genotype as well as environmental factors
 - Traits can uniquely arise through mutations in reproduction process.
 
