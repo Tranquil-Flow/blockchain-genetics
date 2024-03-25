@@ -1,9 +1,42 @@
 # blockchain-genetics
 Genetics system with inheritence pattern based on dominant/recessive genes
 
-Ideas
-[] Merkle Tree for NFT to store family tree?
+### Ideas
+[] Merkle Tree for NFT to store family tree? Would also allow extraction of all ancestors DNA.
+[] Consider more secure randomness with Chainlink VRF or Unifaction VOR
 
+### Problems
+[] How do unique new traits arise?
+[]
+
+### To-Do
+[] 
+
+## Genetic NFTs
+Genetic NFT's can breed with one another to produce children, which take their genetics from a randomised combination of their parents DNA similar to biological life.
+
+### v1
+- Genes are pre-defined
+- Basic breeding system with fuzzing of adult DNA values to determine child DNA values.
+- aGene (`enum`) have 50/50 chance of inheriting from parent A or B
+- cGene (`uint`) is the average of a fuzzed value from parent A and B
+
+### v2
+- More refined system of trait expression to match real life's complexities. Remove allele ranking and replace.
+- Traits can uniquely arise through mutations in breeding process.
+
+# Biology Info
+
+### Glossary
+- **DNA**: A molecule that carries the genetic instructions used in the growth, development, functioning, and reproduction of all known living organisms and many viruses. DNA is the hereditary material in humans and almost all other organisms.
+
+- **Chromosome**: A long DNA molecule with part or all of the genetic material of an organism. Chromosomes are located in the nucleus of cells and contain genes arranged in a specific sequence. Humans have 23 pairs of chromosomes.
+
+- **Phenotype**: The set of observable characteristics or traits of an organism, resulting from the interaction of its genotype with the environment. This includes physical appearance, behavior, and biochemical properties.
+
+- **Genotype**: The genetic constitution of an individual organism, often referring to a specific set of genes or alleles that code for particular traits. The genotype is a major influencing factor in the phenotype of the organism.
+
+- **Allele**: A variant form of a gene that is located at a specific position, or locus, on a chromosome. Alleles contribute to the organism's genotype and influence its phenotype. Different alleles can result in different observable traits.
 ## Gene Types
 
 ### Characteristics (cGene)
@@ -25,7 +58,7 @@ Example: Height, Hair Growth Rate
 `inheritenceValueType`: Average (Child value is (Parent A + Parent B) / 2)), Variable (Child value is >= ParentLowerValue & <= ParentHighValue)
 `inheritenceValueFuzz`: Applies a 'fuzz' to the uint, allowing for value to have a chance to change up to +- the defined %. 
 
-## Info
+## Expression of traits through allele combinations
 
 Parents pass on traits or characteristics, such as eye colour and blood type, to their children through their genes. Some health conditions and diseases can be passed on genetically too.
 
