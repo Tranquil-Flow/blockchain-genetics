@@ -2,6 +2,10 @@ pragma solidity 0.8.25;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
+error MustOwnOrganism();
+error NoReproductionRequestToCancel();
+error ReproductionNotRequested();
+
 contract GeneticNFT is ERC721 {
     enum EyeColor { BLUE, GREEN, BROWN }
     enum BloodType { A, B, AB, O }
@@ -19,20 +23,51 @@ contract GeneticNFT is ERC721 {
     }
 
     Organism[] public organisms;
+    mapping (uint => uint) public reproductionApprovals;
 
     uint public geneticVariation = 10; // genetic variation range a trait can shift during reproduction
 
     constructor() ERC721("GeneticNFT", "GNFT") {}
 
-    function reproduce(uint _organism1Id, uint _organism2Id) public {
+    function requestReproduction(uint _organism1Id, uint _organism2Id) public {
+        if (!(ownerOf(_organism1Id) == msg.sender || ownerOf(_organism2Id) == msg.sender)) {
+            revert MustOwnOrganism();
+        }
+        reproductionApprovals[_organism1Id] = _organism2Id;
+    }
+
+    function cancelReproductionRequest(uint _organism1Id) public {
+        if (ownerOf(_organism1Id) != msg.sender) {
+            revert MustOwnOrganism();
+        }
+        if (reproductionApprovals[_organism1Id] == 0) {
+            revert NoReproductionRequestToCancel();
+        }
+        delete reproductionApprovals[_organism1Id];
+    }
+
+    function approveReproduction(uint _organism1Id, uint _organism2Id) public {
+        if (reproductionApprovals[_organism1Id] != _organism2Id) {
+            revert ReproductionNotRequested();
+        }
+        if (!(ownerOf(_organism1Id) == msg.sender || ownerOf(_organism2Id) == msg.sender)) {
+            revert MustOwnOrganism();
+        }
+        reproduce(_organism1Id, _organism2Id);
+    }
+
+    function reproduce(uint _organism1Id, uint _organism2Id) private {
         Organism storage organism1 = organisms[_organism1Id];
         Organism storage organism2 = organisms[_organism2Id];
 
         bytes32 randomHash = keccak256(abi.encodePacked(blockhash(block.number - 1), blockhash(block.number - 2), blockhash(block.number - 3), msg.sender, _organism1Id, _organism2Id));
         uint randomResult = uint(randomHash);
 
+        // Enum Traits
         EyeColor childEyeColor = (randomResult % 2 == 0) ? organism1.traits.eyeColor : organism2.traits.eyeColor;
         BloodType childBloodType = (randomResult % 3 == 0) ? organism1.traits.bloodType : organism2.traits.bloodType;
+
+        // Uint Traits
         uint childHeight = mutateValue((randomResult % 2 == 0) ? organism1.traits.height : organism2.traits.height);
         uint childHairGrowthRate = mutateValue((randomResult % 2 == 0) ? organism1.traits.hairGrowthRate : organism2.traits.hairGrowthRate);
 
